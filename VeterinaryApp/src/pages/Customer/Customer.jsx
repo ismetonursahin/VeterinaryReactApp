@@ -101,10 +101,10 @@ function Customer() {
   return (
     <div>
       <div>
-        <h1 className="text-center mt-6 text-[2rem] font-medium ">
+        <h1 className="text-center mt-6 text-[2rem] font-medium text-white ">
           Müşteriler
         </h1>
-        <table className=" rounded-lg  py-5 bg-slate-50  w-11/12 mx-auto mt-8 table-fixed overflow-hidden">
+        <table className=" rounded-lg  py-2 bg-slate-50  w-11/12 mx-auto mt-8 table-fixed overflow-hidden">
           <thead className=" border h-14 font-extrabold text-slate-400  text-xl ">
             <tr className="">
               <th className=" border w-2/12">İsim</th>

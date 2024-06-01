@@ -8,4 +8,12 @@ body {
   padding: 0;
   box-sizing: border-box;
   font-family: "Kanit", sans-serif;
+  /* background-image: url(../public/dog1.jpeg);
+  object-fit: cover;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 100%; */
+  background-color: #094428;
 }

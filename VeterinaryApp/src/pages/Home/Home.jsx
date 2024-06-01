@@ -1,7 +1,8 @@
 import React from "react";
+import dog from "../../../../VeterinaryApp/public/dog1.jpeg";
 
 function Home() {
-  return <div>anasayfa</div>;
+  return <div className="w-full h-full">anasayfa</div>;
 }
 
 export default Home;
