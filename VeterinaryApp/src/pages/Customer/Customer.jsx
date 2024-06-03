@@ -100,11 +100,128 @@ function Customer() {
 
   return (
     <div>
-      <div>
-        <h1 className="text-center mt-6 text-[2rem] font-medium text-white ">
-          Müşteriler
-        </h1>
-        <table className=" rounded-lg  py-2 bg-slate-50  w-11/12 mx-auto mt-8 table-fixed overflow-hidden">
+      <h1 className="text-center mt-6 text-[2rem] font-medium text-white ">
+        Müşteriler
+      </h1>
+      <div
+        className=" 
+      backdrop-blur-[6px] bg-white/15 flex justify-evenly rounded-md w-10/12 mx-auto mb-8 mt-4"
+      >
+        <div className="px-4 py-4">
+          <div className=" mt-2  backdrop-blur-[6px] bg-white/10 px-8 rounded-md pb-3">
+            <h2 className="text-center text-white text-xl py-1">
+              Müşteri Ekle
+            </h2>
+            <div className="flex flex-col gap-2 w-44 items-center">
+              <input
+                className="rounded-sm px-1 py-1"
+                type="text"
+                name="name"
+                value={newCustomer.name}
+                placeholder="Müşteri Adı"
+                onChange={handleNewCustomerInputChange}
+              />{" "}
+              <input
+                className="rounded-sm px-1 py-1"
+                type="text"
+                name="phone"
+                value={newCustomer.phone}
+                placeholder="Müşteri Telefon"
+                onChange={handleNewCustomerInputChange}
+              />{" "}
+              <input
+                className="rounded-sm px-1 py-1"
+                type="text"
+                name="email"
+                value={newCustomer.email}
+                placeholder="Müşteri E-mail"
+                onChange={handleNewCustomerInputChange}
+              />{" "}
+              <input
+                className="rounded-sm px-1 py-1"
+                type="text"
+                name="address"
+                value={newCustomer.address}
+                placeholder="Müşteri Adres"
+                onChange={handleNewCustomerInputChange}
+              />{" "}
+              <input
+                className="rounded-sm px-1 py-1"
+                type="text"
+                name="city"
+                value={newCustomer.city}
+                placeholder="Şehir"
+                onChange={handleNewCustomerInputChange}
+              />
+              <button
+                onClick={handleAddNewCustomer}
+                className="flex justify-center items-center w-24 p-1 bg-green-400 gap-2 rounded-lg"
+              >
+                <div>
+                  <IoMdAdd />
+                </div>
+                <div>Ekle</div>
+              </button>
+            </div>
+          </div>
+          <div className="mt-2  backdrop-blur-[6px] bg-white/10 px-8 rounded-md pb-3">
+            <h2 className="text-xl text-white text-center py-1">
+              Müşteri Güncelle
+            </h2>
+            <div className="flex flex-col gap-2 w-44 items-center">
+              <input
+                className="rounded-sm px-1 py-1"
+                type="text"
+                name="name"
+                value={updateCustomer.name}
+                placeholder="Müşteri Adı"
+                onChange={handleUpdateCustomerInputChange}
+              />{" "}
+              <input
+                className="rounded-sm px-1 py-1"
+                type="text"
+                name="phone"
+                value={updateCustomer.phone}
+                placeholder="Müşteri Telefon"
+                onChange={handleUpdateCustomerInputChange}
+              />{" "}
+              <input
+                className="rounded-sm px-1 py-1"
+                type="text"
+                name="email"
+                value={updateCustomer.email}
+                placeholder="Müşteri E-mail"
+                onChange={handleUpdateCustomerInputChange}
+              />{" "}
+              <input
+                className="rounded-sm px-1 py-1"
+                type="text"
+                name="address"
+                value={updateCustomer.address}
+                placeholder="Müşteri Adres"
+                onChange={handleUpdateCustomerInputChange}
+              />{" "}
+              <input
+                className="rounded-sm px-1 py-1"
+                type="text"
+                name="city"
+                value={updateCustomer.city}
+                placeholder="Şehir"
+                onChange={handleUpdateCustomerInputChange}
+              />
+              <button
+                onClick={handleUpdateCustomer}
+                className="flex justify-center items-center w-24 p-1 bg-blue-400 gap-2 rounded-lg"
+              >
+                <div>
+                  <MdModeEdit />
+                </div>
+                <div>Güncelle</div>
+              </button>
+            </div>
+          </div>
+        </div>
+        <table className="border h-14 font-extrabold text-slate-400  text-xl rounded-lg  py-5 bg-slate-50  w-9/12 mx-auto mt-8 table-fixed overflow-hidden ">
           <thead className=" border h-14 font-extrabold text-slate-400  text-xl ">
             <tr className="">
               <th className=" border w-2/12">İsim</th>
@@ -150,106 +267,6 @@ function Customer() {
             })}
           </tbody>
         </table>
-      </div>
-      <div className="flex justify-center items-center gap-16 mt-6">
-        <div className="bg-slate-400 mt-2 ">
-          <h2>Müşteri Ekle</h2>
-          <div className="flex flex-col gap-2 w-44 items-center">
-            <input
-              type="text"
-              name="name"
-              value={newCustomer.name}
-              placeholder="Müşteri Adı"
-              onChange={handleNewCustomerInputChange}
-            />{" "}
-            <input
-              type="text"
-              name="phone"
-              value={newCustomer.phone}
-              placeholder="Müşteri Telefon"
-              onChange={handleNewCustomerInputChange}
-            />{" "}
-            <input
-              type="text"
-              name="email"
-              value={newCustomer.email}
-              placeholder="Müşteri E-mail"
-              onChange={handleNewCustomerInputChange}
-            />{" "}
-            <input
-              type="text"
-              name="address"
-              value={newCustomer.address}
-              placeholder="Müşteri Adres"
-              onChange={handleNewCustomerInputChange}
-            />{" "}
-            <input
-              type="text"
-              name="city"
-              value={newCustomer.city}
-              placeholder="Şehir"
-              onChange={handleNewCustomerInputChange}
-            />
-            <button
-              onClick={handleAddNewCustomer}
-              className="flex justify-center items-center w-24 p-1 bg-green-400 gap-2 rounded-lg"
-            >
-              <div>
-                <IoMdAdd />
-              </div>
-              <div>Ekle</div>
-            </button>
-          </div>
-        </div>
-        <div className="bg-slate-400 mt-2 ">
-          <h2>Müşteri Güncelle</h2>
-          <div className="flex flex-col gap-2 w-44 items-center">
-            <input
-              type="text"
-              name="name"
-              value={updateCustomer.name}
-              placeholder="Müşteri Adı"
-              onChange={handleUpdateCustomerInputChange}
-            />{" "}
-            <input
-              type="text"
-              name="phone"
-              value={updateCustomer.phone}
-              placeholder="Müşteri Telefon"
-              onChange={handleUpdateCustomerInputChange}
-            />{" "}
-            <input
-              type="text"
-              name="email"
-              value={updateCustomer.email}
-              placeholder="Müşteri E-mail"
-              onChange={handleUpdateCustomerInputChange}
-            />{" "}
-            <input
-              type="text"
-              name="address"
-              value={updateCustomer.address}
-              placeholder="Müşteri Adres"
-              onChange={handleUpdateCustomerInputChange}
-            />{" "}
-            <input
-              type="text"
-              name="city"
-              value={updateCustomer.city}
-              placeholder="Şehir"
-              onChange={handleUpdateCustomerInputChange}
-            />
-            <button
-              onClick={handleUpdateCustomer}
-              className="flex justify-center items-center w-24 p-1 bg-blue-400 gap-2 rounded-lg"
-            >
-              <div>
-                <MdModeEdit />
-              </div>
-              <div>Güncelle</div>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );

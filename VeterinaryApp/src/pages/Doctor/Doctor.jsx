@@ -147,7 +147,11 @@ function Doctor() {
 
   const handleUpdateAvailableDateBtn = (e) => {
     const index = e.target.id;
-    setUpdateAvailableDate({ ...availableDate[index] });
+    setUpdateAvailableDate({
+      id: availableDate[index].id,
+      workDate: availableDate[index].workDay,
+      doctorId: availableDate[index].doctor.id,
+    });
     console.log(updateAvailableDate);
   };
 
@@ -171,10 +175,9 @@ function Doctor() {
 
   const handleUpdateDoctorSelectChange = (e) => {
     const id = e.target.value;
-    const newdoctor = doctor.find((d) => d.id === +id);
     setUpdateAvailableDate((prev) => ({
       ...prev,
-      doctorId: newdoctor.id,
+      doctorId: parseInt(id),
     }));
   };
 
@@ -351,6 +354,17 @@ function Doctor() {
           Müsait Gün Yönetimi
         </h1>
         <div>
+          <div className="flex text-right justify-end mr-24 mt-2 gap-1">
+            <input
+              type="text"
+              placeholder="Gün"
+              className="py-1 rounded-md pl-2"
+            />
+            <button className="bg-yellow-400 rounded-md px-2 ">Ara</button>
+          </div>
+        </div>
+
+        <div>
           <table className=" rounded-lg  py-5 bg-slate-50  w-11/12 mx-auto mt-8 table-fixed overflow-hidden">
             <thead className=" border h-14 font-extrabold text-slate-400  text-xl ">
               <tr className="">
@@ -396,9 +410,9 @@ function Doctor() {
             </tbody>
           </table>
         </div>
-        <div className="backdrop-blur-[6px] bg-white/15 flex justify-evenly rounded-md w-10/12 mx-auto mb-8 mt-4">
-          <div className="ekleme">
-            <h1>Tarih Ekle</h1>
+        <div className="backdrop-blur-[6px] bg-white/15 flex justify-evenly rounded-md w-10/12 mx-auto mb-8 mt-4 ">
+          <div className="flex gap-3 backdrop-blur-[6px] bg-white/10 rounded-md items-center px-4 py-5">
+            <h1 className="text-white text-xl">Tarih Ekle</h1>
             <div className="">
               <input
                 className="rounded-sm px-1 py-1"
@@ -411,6 +425,7 @@ function Doctor() {
               <select
                 name="doctorId"
                 id="doctorSelect"
+                className="py-1 rounded-sm"
                 value={newAvailableDate.doctorId || ""}
                 onChange={handleDoctorSelectChange}
               >
@@ -420,24 +435,30 @@ function Doctor() {
                   </option>
                 ))}
               </select>
-              <button onClick={handleNewAvailableDate}>Tarih Ekle</button>
+              <button
+                className=" bg-green-500 rounded-md px-2 py-[6px] ml-1"
+                onClick={handleNewAvailableDate}
+              >
+                Tarih Ekle
+              </button>
             </div>
           </div>
-          <div className="güncelleme">
-            <h1>Tarih Güncelle</h1>
+          <div className="flex gap-3 backdrop-blur-[6px] bg-white/10 rounded-md items-center px-4 py-5">
+            <h1 className="text-white text-xl">Tarih Güncelle</h1>
             <div className="">
               <input
                 className="rounded-sm px-1 py-1"
                 type="date"
                 name="workDate"
-                value={updateAvailableDate.workDay}
+                value={updateAvailableDate.workDate}
                 placeholder="Tarih"
                 onChange={handleUpdateAvailableDateInputChange}
               />{" "}
               <select
                 name="doctorId"
                 id="doctorSelect"
-                value={updateAvailableDate?.doctor?.id || ""}
+                className="py-1 rounded-sm"
+                value={updateAvailableDate?.doctorId || ""}
                 onChange={handleUpdateDoctorSelectChange}
               >
                 {doctor?.map((doc, index) => (
@@ -446,7 +467,10 @@ function Doctor() {
                   </option>
                 ))}
               </select>
-              <button onClick={handleUpdateAvailableDate}>
+              <button
+                onClick={handleUpdateAvailableDate}
+                className=" bg-blue-400 rounded-md px-2 py-[6px] ml-1"
+              >
                 Tarih Güncelle
               </button>
             </div>
