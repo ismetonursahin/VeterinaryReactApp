@@ -5,6 +5,10 @@ import { MdDelete } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
 
 function Doctor() {
+  const initState = {
+    workDate: "",
+    doctorId: "",
+  };
   const [doctor, setDoctor] = useState([]);
   const [update, setUpdate] = useState(false);
   const [updateDoctor, setUpdateDoctor] = useState({
@@ -21,17 +25,6 @@ function Doctor() {
     address: "",
     city: "",
   });
-
-  const [availableDate, setAvailableDate] = useState();
-  const [newAvailableDate, setNewAvailableDate] = useState({
-    workDate: "",
-    doctor: {},
-  });
-
-  // const [updateAvailableDate, setUpdateAvailableDate] = useState({
-  //   workDate: "",
-  //   doctorId: {},
-  // });
 
   useEffect(() => {
     axios
@@ -107,6 +100,14 @@ function Doctor() {
     setUpdateDoctor({ ...doctor[index] });
   };
 
+  const [availableDate, setAvailableDate] = useState([]);
+  const [newAvailableDate, setNewAvailableDate] = useState({
+    ...initState,
+  });
+  const [updateAvailableDate, setUpdateAvailableDate] = useState({
+    ...initState,
+  });
+
   const handleNewAvailableDateInputChange = (e) => {
     const { name, value } = e.target;
     setNewAvailableDate((prev) => ({
@@ -115,29 +116,66 @@ function Doctor() {
     }));
   };
 
+  const handleDoctorSelectChange = (e) => {
+    const id = e.target.value;
+    const newdoctor = doctor.find((d) => d.id === +id);
+    setNewAvailableDate((prev) => ({
+      ...prev,
+      doctorId: newdoctor.id,
+    }));
+    console.log(newdoctor.id);
+  };
+
   const handleNewAvailableDate = () => {
     axios
       .post(
         import.meta.env.VITE_VET_API_BASEURL + "/api/v1/available-dates",
         newAvailableDate
       )
-      .then(() => {
-        setNewAvailableDate({
-          workDate: "",
-          doctor: {},
-        });
-        setUpdate(false);
-      });
+      .then(() => setUpdate(false))
+      .then(() => setNewAvailableDate({ ...initState }));
   };
 
-  const handleDoctorSelectChange = (e) => {
+  const handleDeleteAvailableDate = (e) => {
+    const id = e.target.id;
+    axios
+      .delete(
+        import.meta.env.VITE_VET_API_BASEURL + `/api/v1/available-dates/${id}`
+      )
+      .then(() => setUpdate(false));
+  };
+
+  const handleUpdateAvailableDateBtn = (e) => {
+    const index = e.target.id;
+    setUpdateAvailableDate({ ...availableDate[index] });
+    console.log(updateAvailableDate);
+  };
+
+  const handleUpdateAvailableDate = () => {
+    const { id } = updateAvailableDate;
+    axios
+      .put(
+        import.meta.env.VITE_VET_API_BASEURL + `/api/v1/available-dates/${id}`,
+        updateAvailableDate
+      )
+      .then(() => setUpdate(false));
+  };
+
+  const handleUpdateAvailableDateInputChange = (e) => {
+    const { name, value } = e.target;
+    setUpdateAvailableDate((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleUpdateDoctorSelectChange = (e) => {
     const id = e.target.value;
     const newdoctor = doctor.find((d) => d.id === +id);
-    setNewAvailableDate((prev) => ({
+    setUpdateAvailableDate((prev) => ({
       ...prev,
-      doctor: newdoctor,
+      doctorId: newdoctor.id,
     }));
-    console.log(newAvailableDate.doctor.id);
   };
 
   return (
@@ -336,7 +374,7 @@ function Doctor() {
                    "
                     >
                       <div
-                        onClick={handleDeleteDoctor}
+                        onClick={handleDeleteAvailableDate}
                         id={available.id}
                         className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
                       >
@@ -344,7 +382,7 @@ function Doctor() {
                         Sil
                       </div>
                       <div
-                        onClick={handleUpdateDoctorBtn}
+                        onClick={handleUpdateAvailableDateBtn}
                         id={index}
                         className="flex justify-center items-center text-center cursor-pointer text-blue-400 rounded-md px-2 text-xl bg-blue-100"
                       >
@@ -358,8 +396,8 @@ function Doctor() {
             </tbody>
           </table>
         </div>
-        <div className="backdrop-blur-[6px] bg-white/15 rounded-md w-10/12 mx-auto mb-8 mt-4">
-          <div>
+        <div className="backdrop-blur-[6px] bg-white/15 flex justify-evenly rounded-md w-10/12 mx-auto mb-8 mt-4">
+          <div className="ekleme">
             <h1>Tarih Ekle</h1>
             <div className="">
               <input
@@ -371,29 +409,48 @@ function Doctor() {
                 onChange={handleNewAvailableDateInputChange}
               />{" "}
               <select
-                name="doctor"
+                name="doctorId"
                 id="doctorSelect"
-                value={newAvailableDate.doctor.id}
+                value={newAvailableDate.doctorId || ""}
                 onChange={handleDoctorSelectChange}
               >
                 {doctor?.map((doc) => (
-                  <option name="doctor" value={doc.id} key={doc.id}>
+                  <option value={doc.id} key={doc.id}>
                     {doc.name}
                   </option>
                 ))}
               </select>
-              {/* <input
-                className="rounded-sm px-1 py-1 w-16"
-                type="number"
-                name="doctorId"
-                value={newAvailableDate.doctorId}
-                placeholder="Doktor ID"
-                onChange={handleNewAvailableDateInputChange}
-              />{" "} */}
               <button onClick={handleNewAvailableDate}>Tarih Ekle</button>
             </div>
           </div>
-          <div>Gün güncelle </div>
+          <div className="güncelleme">
+            <h1>Tarih Güncelle</h1>
+            <div className="">
+              <input
+                className="rounded-sm px-1 py-1"
+                type="date"
+                name="workDate"
+                value={updateAvailableDate.workDay}
+                placeholder="Tarih"
+                onChange={handleUpdateAvailableDateInputChange}
+              />{" "}
+              <select
+                name="doctorId"
+                id="doctorSelect"
+                value={updateAvailableDate?.doctor?.id || ""}
+                onChange={handleUpdateDoctorSelectChange}
+              >
+                {doctor?.map((doc, index) => (
+                  <option value={doc.id} key={doc.id} id={index}>
+                    {doc.name}
+                  </option>
+                ))}
+              </select>
+              <button onClick={handleUpdateAvailableDate}>
+                Tarih Güncelle
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
