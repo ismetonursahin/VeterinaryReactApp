@@ -5,26 +5,23 @@ import { MdDelete } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
 
 function Animal() {
+  const initState = {
+    name: "",
+    species: "",
+    breed: "",
+    gender: "",
+    colour: "",
+    dateOfBirth: "",
+    customer: {},
+  };
   const [customer, setCustomer] = useState([]);
   const [animal, setAnimal] = useState([]);
   const [update, setUpdate] = useState(false);
   const [newAnimal, setNewAnimal] = useState({
-    name: "",
-    species: "",
-    breed: "",
-    gender: "",
-    colour: "",
-    dateOfBirth: "",
-    customer: {},
+    ...initState,
   });
   const [updateAnimal, setUpdateAnimal] = useState({
-    name: "",
-    species: "",
-    breed: "",
-    gender: "",
-    colour: "",
-    dateOfBirth: "",
-    customer: {},
+    ...initState,
   });
 
   useEffect(() => {
@@ -61,6 +58,7 @@ function Animal() {
           customer: {},
         })
       );
+    console.log(newAnimal);
   };
   const handleNewAnimalSelectChange = (e) => {
     const id = e.target.value;
@@ -83,7 +81,6 @@ function Animal() {
   const handleUpdateAnimalBtn = (e) => {
     const index = e.target.id;
     setUpdateAnimal({ ...animal[index] });
-    console.log(updateAnimal);
   };
   const handleUpdateAnimaInputChange = (e) => {
     const { name, value } = e.target;
@@ -130,6 +127,16 @@ function Animal() {
           <input
             type="text"
             placeholder="Hayvan Adı"
+            className="py-1 rounded-md pl-2"
+          />
+          <button className="bg-yellow-400 rounded-md px-2 ">Ara</button>
+        </div>
+      </div>
+      <div>
+        <div className="flex text-right justify-end mr-24 mt-2 gap-1">
+          <input
+            type="text"
+            placeholder="Müşteri Adı"
             className="py-1 rounded-md pl-2"
           />
           <button className="bg-yellow-400 rounded-md px-2 ">Ara</button>

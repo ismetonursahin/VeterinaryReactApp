@@ -103,6 +103,28 @@ function Customer() {
       <h1 className="text-center mt-6 text-[2rem] font-medium text-white ">
         Müşteriler
       </h1>
+      <div className="flex text-right justify-end mr-24 mt-2 gap-1">
+        <label htmlFor="" className="flex justify-center items-center gap-2">
+          <h2 className="text-white text-xl">Müşteri Adı</h2>
+          <input
+            type="text"
+            placeholder="Müşteri Adı"
+            className="py-1 rounded-md pl-2"
+          />
+        </label>
+        <button className="bg-yellow-400 rounded-md px-2 ">Ara</button>
+      </div>
+      <div className="flex text-right justify-end mr-24 mt-2 gap-1">
+        <label htmlFor="" className="flex justify-center items-center gap-2">
+          <h2 className="text-white text-xl">Müşteri ID</h2>
+          <input
+            type="text"
+            placeholder="Müşteri ID"
+            className="py-1 rounded-md pl-2"
+          />
+        </label>
+        <button className="bg-yellow-400 rounded-md px-2 ">Ara</button>
+      </div>
       <div
         className=" 
       backdrop-blur-[6px] bg-white/15 flex justify-evenly rounded-md w-10/12 mx-auto mb-8 mt-4"

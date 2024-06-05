@@ -185,6 +185,19 @@ function Doctor() {
     <div>
       <h1 className="text-white text-2xl text-center mt-4">Doktorlar</h1>
       <div>
+        <div className="flex text-right justify-end mr-24 mt-2 gap-1">
+          <label htmlFor="" className="flex justify-center items-center gap-2">
+            <h2 className="text-white text-xl">Doktor ID</h2>
+            <input
+              type="text"
+              placeholder="Doktor ID"
+              className="py-1 rounded-md pl-2"
+            />
+          </label>
+          <button className="bg-yellow-400 rounded-md px-2 ">Ara</button>
+        </div>
+      </div>
+      <div>
         <table className=" rounded-lg  py-5 bg-slate-50  w-11/12 mx-auto mt-8 table-fixed overflow-hidden">
           <thead className=" border h-14 font-extrabold text-slate-400  text-xl ">
             <tr className="">
@@ -353,15 +366,16 @@ function Doctor() {
         <h1 className="text-white text-center text-2xl mt-5">
           Müsait Gün Yönetimi
         </h1>
-        <div>
-          <div className="flex text-right justify-end mr-24 mt-2 gap-1">
+        <div className="flex text-right justify-end mr-24 mt-2 gap-1">
+          <label htmlFor="" className="flex justify-center items-center gap-2">
+            <h2 className="text-white text-xl">Gün ID</h2>
             <input
               type="text"
-              placeholder="Gün"
+              placeholder="Gün ID"
               className="py-1 rounded-md pl-2"
             />
-            <button className="bg-yellow-400 rounded-md px-2 ">Ara</button>
-          </div>
+          </label>
+          <button className="bg-yellow-400 rounded-md px-2 ">Ara</button>
         </div>
 
         <div>
