@@ -17,8 +17,8 @@ function Appointment() {
   });
   const [updateAppointment, setUpdateAppointment] = useState({
     appointmentDate: "",
-    doctor: {},
-    animal: {},
+    doctor: "",
+    animal: "",
   });
 
   useEffect(() => {
@@ -98,7 +98,7 @@ function Appointment() {
     const newdoctor = doctor.find((d) => d.id === +value);
     setUpdateAppointment((prev) => ({
       ...prev,
-      doctor: newdoctor,
+      doctor: newdoctor.id,
     }));
   };
   const handleUpdateAnimalSelectChange = (e) => {
@@ -106,7 +106,7 @@ function Appointment() {
     const newanimal = animal.find((d) => d.id === +value);
     setUpdateAppointment((prev) => ({
       ...prev,
-      animal: newanimal,
+      animal: newanimal.id,
     }));
   };
 
@@ -115,15 +115,15 @@ function Appointment() {
     console.log(updateAppointment);
     axios
       .put(
-        import.meta.env.VITE_VET_API_BASEURL + `/api/v1/animals/${id}`,
+        import.meta.env.VITE_VET_API_BASEURL + `/api/v1/appointments/${id}`,
         updateAppointment
       )
       .then(() => setUpdate(false))
       .then(
         setUpdateAppointment({
           appointmentDate: "",
-          doctor: {},
-          animal: {},
+          doctor: "",
+          animal: "",
         })
       );
   };
