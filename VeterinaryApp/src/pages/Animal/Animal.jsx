@@ -150,66 +150,88 @@ function Animal() {
               Hayvan Ekle
             </h2>
             <div className="flex flex-col gap-2 w-44 items-center">
-              <input
-                className="rounded-sm px-1 py-1"
-                type="text"
-                name="name"
-                value={newAnimal.name}
-                placeholder="Hayvan Adı"
-                onChange={handleNewAnimaInputChange}
-              />{" "}
-              <input
-                className="rounded-sm px-1 py-1"
-                type="text"
-                name="species"
-                value={newAnimal.species}
-                placeholder="Tür"
-                onChange={handleNewAnimaInputChange}
-              />{" "}
-              <input
-                className="rounded-sm px-1 py-1"
-                type="text"
-                name="breed"
-                value={newAnimal.breed}
-                placeholder="Cins"
-                onChange={handleNewAnimaInputChange}
-              />{" "}
-              <input
-                className="rounded-sm px-1 py-1"
-                type="text"
-                name="gender"
-                value={newAnimal.gender}
-                placeholder="Cinsiyet"
-                onChange={handleNewAnimaInputChange}
-              />{" "}
-              <input
-                className="rounded-sm px-1 py-1"
-                type="text"
-                name="colour"
-                value={newAnimal.colour}
-                placeholder="Renk"
-                onChange={handleNewAnimaInputChange}
-              />
-              <input
-                className="rounded-sm px-1 py-1"
-                type="date"
-                name="dateOfBirth"
-                value={newAnimal.dateOfBirth}
-                placeholder="Doğum Tarihi"
-                onChange={handleNewAnimaInputChange}
-              />
-              <select
-                name="customer"
-                id="customerId"
-                value={newAnimal?.customer?.id || ""}
-                onChange={handleNewAnimalSelectChange}
-              >
-                {customer?.map((cust, index) => (
-                  <option value={cust.id} key={cust.id} id={index}>
-                    {cust.name}
-                  </option>
-                ))}
-              </select>
+              <label htmlFor="">
+                <h2 className="text-white">Hayvan Adı</h2>
+                <input
+                  className="rounded-sm px-1 py-1"
+                  type="text"
+                  name="name"
+                  value={newAnimal.name}
+                  placeholder="Hayvan Adı"
+                  onChange={handleNewAnimaInputChange}
+                />{" "}
+              </label>
+              <label htmlFor="">
+                <h2 className="text-white">Hayvan Türü</h2>
+                <input
+                  className="rounded-sm px-1 py-1"
+                  type="text"
+                  name="species"
+                  value={newAnimal.species}
+                  placeholder="Tür"
+                  onChange={handleNewAnimaInputChange}
+                />{" "}
+              </label>
+              <label htmlFor="">
+                <h2 className="text-white">Hayvan Cinsi</h2>
+                <input
+                  className="rounded-sm px-1 py-1"
+                  type="text"
+                  name="breed"
+                  value={newAnimal.breed}
+                  placeholder="Cins"
+                  onChange={handleNewAnimaInputChange}
+                />{" "}
+              </label>
+              <label htmlFor="">
+                <h2 className="text-white">Hayvan Cinsiyeti</h2>
+                <input
+                  className="rounded-sm px-1 py-1"
+                  type="text"
+                  name="gender"
+                  value={newAnimal.gender}
+                  placeholder="Cinsiyet"
+                  onChange={handleNewAnimaInputChange}
+                />{" "}
+              </label>
+              <label htmlFor="">
+                <h2 className="text-white">Hayvan Renk</h2>
+                <input
+                  className="rounded-sm px-1 py-1"
+                  type="text"
+                  name="colour"
+                  value={newAnimal.colour}
+                  placeholder="Renk"
+                  onChange={handleNewAnimaInputChange}
+                />
+              </label>
+              <label htmlFor="">
+                <h2 className="text-white">Hayvan Doğum Tarihi</h2>
+                <input
+                  className="rounded-sm px-1 py-1"
+                  type="date"
+                  name="dateOfBirth"
+                  value={newAnimal.dateOfBirth}
+                  placeholder="Doğum Tarihi"
+                  onChange={handleNewAnimaInputChange}
+                />
+              </label>
+              <label htmlFor="">
+                <h2 className="text-white">Müşteri</h2>
+                <select
+                  name="customer"
+                  id="customerId"
+                  value={newAnimal?.customer?.id || ""}
+                  onChange={handleNewAnimalSelectChange}
+                >
+                  <option value="">Müşteri Seç</option>
+                  {customer?.map((cust, index) => (
+                    <option value={cust.id} key={cust.id} id={index}>
+                      {cust.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
               <button
                 onClick={handleAddNewAnimal}
                 className="flex justify-center items-center w-24 p-1 bg-green-400 gap-2 rounded-lg"
@@ -226,66 +248,88 @@ function Animal() {
               Hayvan Güncelle
             </h2>
             <div className="flex flex-col gap-2 w-44 items-center">
-              <input
-                className="rounded-sm px-1 py-1"
-                type="text"
-                name="name"
-                value={updateAnimal.name}
-                placeholder="Hayvan Adı"
-                onChange={handleUpdateAnimaInputChange}
-              />
-              <input
-                className="rounded-sm px-1 py-1"
-                type="text"
-                name="species"
-                value={updateAnimal.species}
-                placeholder="Tür"
-                onChange={handleUpdateAnimaInputChange}
-              />
-              <input
-                className="rounded-sm px-1 py-1"
-                type="text"
-                name="breed"
-                value={updateAnimal.breed}
-                placeholder="Cins"
-                onChange={handleUpdateAnimaInputChange}
-              />
-              <input
-                className="rounded-sm px-1 py-1"
-                type="text"
-                name="gender"
-                value={updateAnimal.gender}
-                placeholder="Cinsiyet"
-                onChange={handleUpdateAnimaInputChange}
-              />{" "}
-              <input
-                className="rounded-sm px-1 py-1"
-                type="text"
-                name="colour"
-                value={updateAnimal.colour}
-                placeholder="Renk"
-                onChange={handleUpdateAnimaInputChange}
-              />
-              <input
-                className="rounded-sm px-1 py-1"
-                type="date"
-                name="dateOfBirth"
-                value={updateAnimal.dateOfBirth}
-                placeholder="Doğum Tarihi"
-                onChange={handleUpdateAnimaInputChange}
-              />
-              <select
-                name="customer"
-                id="customerId"
-                value={updateAnimal?.customer?.id || ""}
-                onChange={handleUpdateAnimalSelectChange}
-              >
-                {customer?.map((cust, index) => (
-                  <option value={cust.id} key={cust.id} id={index}>
-                    {cust.name}
-                  </option>
-                ))}
-              </select>
+              <label htmlFor="">
+                <h2 className="text-white">Hayvan Adı</h2>
+                <input
+                  className="rounded-sm px-1 py-1"
+                  type="text"
+                  name="name"
+                  value={updateAnimal.name}
+                  placeholder="Hayvan Adı"
+                  onChange={handleUpdateAnimaInputChange}
+                />
+              </label>
+              <label htmlFor="">
+                <h2 className="text-white">Hayvan Türü</h2>
+                <input
+                  className="rounded-sm px-1 py-1"
+                  type="text"
+                  name="species"
+                  value={updateAnimal.species}
+                  placeholder="Tür"
+                  onChange={handleUpdateAnimaInputChange}
+                />
+              </label>
+              <label htmlFor="">
+                <h2 className="text-white">Hayvan Cinsi</h2>
+                <input
+                  className="rounded-sm px-1 py-1"
+                  type="text"
+                  name="breed"
+                  value={updateAnimal.breed}
+                  placeholder="Cins"
+                  onChange={handleUpdateAnimaInputChange}
+                />
+              </label>
+              <label htmlFor="">
+                <h2 className="text-white">Hayvan Cinsiyeti</h2>
+                <input
+                  className="rounded-sm px-1 py-1"
+                  type="text"
+                  name="gender"
+                  value={updateAnimal.gender}
+                  placeholder="Cinsiyet"
+                  onChange={handleUpdateAnimaInputChange}
+                />{" "}
+              </label>
+              <label htmlFor="">
+                <h2 className="text-white">Hayvan Renk</h2>
+                <input
+                  className="rounded-sm px-1 py-1"
+                  type="text"
+                  name="colour"
+                  value={updateAnimal.colour}
+                  placeholder="Renk"
+                  onChange={handleUpdateAnimaInputChange}
+                />
+              </label>
+              <label htmlFor="">
+                <h2 className="text-white">Hayvan Doğum Tarihi</h2>
+                <input
+                  className="rounded-sm px-1 py-1"
+                  type="date"
+                  name="dateOfBirth"
+                  value={updateAnimal.dateOfBirth}
+                  placeholder="Doğum Tarihi"
+                  onChange={handleUpdateAnimaInputChange}
+                />
+              </label>
+              <label htmlFor="">
+                <h2 className="text-white">Müşteri</h2>
+                <select
+                  name="customer"
+                  id="customerId"
+                  value={updateAnimal?.customer?.id || ""}
+                  onChange={handleUpdateAnimalSelectChange}
+                >
+                  <option value="">Müşteri Seç</option>
+                  {customer?.map((cust, index) => (
+                    <option value={cust.id} key={cust.id} id={index}>
+                      {cust.name}
+                    </option>
+                  ))}
+                </select>
+              </label>{" "}
               <button
                 onClick={handleUpdateAnimal}
                 className="flex justify-center items-center w-24 p-1 bg-blue-400 gap-2 rounded-lg"

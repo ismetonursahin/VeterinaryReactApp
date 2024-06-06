@@ -294,6 +294,7 @@ function Appointment() {
           <table className=" rounded-lg  py-5 bg-slate-50  w-11/12 mx-auto mt-8 table-fixed overflow-hidden">
             <thead className=" border h-14 font-extrabold text-slate-400  text-xl ">
               <tr className="">
+                <th className=" border w-1/12">ID</th>
                 <th className=" border w-2/12">Doktor</th>
                 <th className=" border w-[8rem]">Randevu Tarih</th>
                 <th className="border w-2/12">Hayvan</th>
@@ -307,6 +308,7 @@ function Appointment() {
               {appointment?.map((appo, index) => {
                 return (
                   <tr key={index} className="text-xl bg-white h-10">
+                    <td className="border"> {appo.id} </td>
                     <td className="border"> {appo?.doctor?.name} </td>
                     <td className="border"> {appo.appointmentDate} </td>
                     <td className="border"> {appo?.animal?.name} </td>
