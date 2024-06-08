@@ -223,7 +223,6 @@ function Report() {
                 <th className=" border w-2/12">Teşhis</th>
                 <th className="border w-2/12">Doktor Adı</th>
                 <th className="border w-2/12">Müşteri</th>
-                <th className="border w-2/12">Aşı</th>
                 <th className="border w-2/12">Ücret</th>
                 <th className="border w-3/12">Sil / Düzenle</th>
               </tr>
@@ -233,7 +232,11 @@ function Report() {
                 return (
                   <tr key={index} className="text-xl bg-white h-10">
                     <td className="border"> {rep.title} </td>
-
+                    <td className="border"> {rep.appointment.animalName} </td>
+                    <td className="border"> {rep.diagnosis} </td>
+                    <td className="border">{rep.appointment.doctorName}</td>
+                    <td className="border"> {rep.appointment.customerName} </td>
+                    <td className="border"> {rep.price} </td>
                     <td
                       className=" border flex justify-center items-center gap-2 py-3
                    "

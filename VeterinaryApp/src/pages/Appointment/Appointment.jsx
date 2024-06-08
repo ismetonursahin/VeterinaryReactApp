@@ -253,7 +253,9 @@ function Appointment() {
                   value={updateAppointment.doctor.id || ""}
                   onChange={handleUpdateDoctorSelectChange}
                 >
-                  <option value="">Doktor Seç</option>
+                  <option disabled value="">
+                    Doktor Seç
+                  </option>
                   {doctor.map((doc, index) => (
                     <option key={doc.id} value={doc.id}>
                       {doc.name}
