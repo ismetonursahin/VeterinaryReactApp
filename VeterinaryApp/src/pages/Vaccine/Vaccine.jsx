@@ -76,44 +76,129 @@ function Vaccine() {
 
   // delete işlemleri
 
-  const handleDeleteVaccine = () => {};
+  const handleDeleteVaccine = (e) => {
+    const id = e.target.id;
+    console.log(id);
+    axios
+      .delete(
+        import.meta.env.VITE_VET_API_BASEURL + `/api/v1/vaccinations/${id}`
+      )
+      .then(() => setUpdate(false));
+  };
 
-  // update işlemleri
+  // filtreleme işlemleri
+  const [animalId, setAnimalId] = useState("");
+  const [filterAnimalID, setFilterAnimalID] = useState([]);
+  const [isAnimalIDSearch, setIsAnimalIDSearch] = useState(false);
 
+  const handleAnimalIdChange = (e) => {
+    const { value } = e.target;
+    setAnimalId(value);
+    console.log(value);
+  };
+
+  const handleAnimalIdBtn = () => {
+    axios
+      .get(
+        import.meta.env.VITE_VET_API_BASEURL +
+          `/api/v1/vaccinations/searchByAnimal?id=${animalId}&pageNumber=0&pageSize=10`
+      )
+      .then((res) => setFilterAnimalID(res.data.content))
+      .then(() => setAnimalId(""))
+      .then(() => setIsAnimalIDSearch(true));
+
+    console.log(filterAnimalID);
+  };
+
+  const [vacStartDate, setVacStartDate] = useState("");
+  const [vacFinishDate, setVacFinishDate] = useState("");
+  const [filterDate, setFilterDate] = useState([]);
+  const [isDate, setIsDate] = useState(false);
+
+  const handleStartDateChange = (e) => {
+    const { value } = e.target;
+    setVacStartDate(value);
+    console.log(value);
+  };
+  const handleFinishDateChange = (e) => {
+    const { value } = e.target;
+    setVacFinishDate(value);
+  };
+
+  const handleDateBtn = () => {
+    axios
+      .get(
+        import.meta.env.VITE_VET_API_BASEURL +
+          `/api/v1/vaccinations/searchByVaccinationRange?startDate=${vacStartDate}&endDate=${vacFinishDate}&pageNumber=0&pageSize=10`
+      )
+      .then((res) => setFilterDate(res.data.content))
+      .then(() => setVacStartDate(""))
+      .then(() => setVacFinishDate(""))
+      .then(() => setIsDate(true));
+  };
+
+  const handleResetBtn = () => {
+    window.location.reload();
+  };
   return (
     <div>
       <h1 className="text-white text-center text-2xl mt-2">Aşı Yönetimi</h1>
+
       <div className="flex text-right justify-end mr-24 mt-2 gap-1">
         <label htmlFor="" className="flex justify-center items-center gap-2">
-          <h2 className="text-white text-xl">Aşı Adı</h2>
-          <input
-            type="text"
-            placeholder="Aşı Adı "
-            className="py-1 rounded-md pl-2"
-          />
+          <h2 className="text-white text-xl">Hayvan ID</h2>
+          <select
+            value={animalId}
+            className="w-12"
+            onChange={handleAnimalIdChange}
+          >
+            <option disabled>Hayvan ID</option>
+            {animal.map((ani, index) => (
+              <option value={ani.id} key={ani.id}>
+                {ani.id}
+              </option>
+            ))}
+          </select>
         </label>
-        <button className="bg-yellow-400 rounded-md px-2 ">Ara</button>
-      </div>
-      <div className="flex text-right justify-end mr-24 mt-2 gap-1">
-        <label htmlFor="" className="flex justify-center items-center gap-2">
-          <h2 className="text-white text-xl">Hayvan Adı</h2>
-          <input
-            type="text"
-            placeholder="Hayvan Adı "
-            className="py-1 rounded-md pl-2"
-          />
-        </label>
-        <button className="bg-yellow-400 rounded-md px-2 ">Ara</button>
+        <button
+          onClick={handleAnimalIdBtn}
+          className="bg-yellow-400 rounded-md px-2 "
+        >
+          Ara
+        </button>
       </div>
       <div className="flex text-right justify-end mr-24 mt-2 gap-1">
         <label htmlFor="" className="flex justify-center items-center gap-2">
           <h2 className="text-white text-xl">Aşı Tarih Aralığı</h2>
-          <input type="date" className="py-1 rounded-md pl-2" />
+          <input
+            type="date"
+            value={vacStartDate}
+            className="py-1 rounded-md pl-2"
+            onChange={handleStartDateChange}
+          />
         </label>
         <label htmlFor="" className="flex justify-center items-center gap-2">
-          <input type="date" className="py-1 rounded-md pl-2" />
+          <input
+            type="date"
+            value={vacFinishDate}
+            className="py-1 rounded-md pl-2"
+            onChange={handleFinishDateChange}
+          />
         </label>
-        <button className="bg-yellow-400 rounded-md px-2 ">Ara</button>
+        <button
+          onClick={handleDateBtn}
+          className="bg-yellow-400 rounded-md px-2 "
+        >
+          Ara
+        </button>
+      </div>
+      <div className="flex text-right justify-end mr-24 mt-2 gap-1">
+        <button
+          onClick={handleResetBtn}
+          className="bg-lime-300 rounded-md px-2 "
+        >
+          Tüm Randevuları Göster
+        </button>
       </div>
 
       <div className="  backdrop-blur-[6px] bg-white/15 flex justify-evenly rounded-md w-10/12 mx-auto mb-8 mt-4">
@@ -212,33 +297,93 @@ function Vaccine() {
                 <th className="border w-2/12">Sil </th>
               </tr>
             </thead>
-            <tbody className="border h-14 font-light text-black  text-xl ">
-              {vaccine?.map((vac, index) => {
-                return (
-                  <tr key={index} className="text-xl bg-white h-10">
-                    <td className="border"> {vac.name} </td>
-                    <td className="border"> {vac.code} </td>
-                    <td className="border"> {vac.protectionStartDate} </td>
-                    <td className="border"> {vac.protectionFinishDate} </td>
-                    <td className="border"> {vac?.animal?.name} </td>
+            {vaccine && !isAnimalIDSearch && !isDate && (
+              <tbody className="border h-14 font-light text-black  text-xl ">
+                {vaccine?.map((vac, index) => {
+                  return (
+                    <tr key={index} className="text-xl bg-white h-10">
+                      <td className="border"> {vac.name} </td>
+                      <td className="border"> {vac.code} </td>
+                      <td className="border"> {vac.protectionStartDate} </td>
+                      <td className="border"> {vac.protectionFinishDate} </td>
+                      <td className="border"> {vac?.animal?.name} </td>
 
-                    <td
-                      className=" border flex justify-center items-center gap-2 py-3
+                      <td
+                        className=" border flex justify-center items-center gap-2 py-3
                "
-                    >
-                      <div
-                        onClick={handleDeleteVaccine}
-                        id={vac.id}
-                        className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
                       >
-                        <MdDelete />
-                        Sil
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
+                        <div
+                          onClick={handleDeleteVaccine}
+                          id={vac.id}
+                          className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
+                        >
+                          <MdDelete />
+                          Sil
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            )}
+            {filterAnimalID && isAnimalIDSearch && (
+              <tbody className="border h-14 font-light text-black  text-xl ">
+                {filterAnimalID?.map((vac, index) => {
+                  return (
+                    <tr key={index} className="text-xl bg-white h-10">
+                      <td className="border"> {vac.name} </td>
+                      <td className="border"> {vac.code} </td>
+                      <td className="border"> {vac.protectionStartDate} </td>
+                      <td className="border"> {vac.protectionFinishDate} </td>
+                      <td className="border"> {vac?.animal?.name} </td>
+
+                      <td
+                        className=" border flex justify-center items-center gap-2 py-3
+              "
+                      >
+                        <div
+                          onClick={handleDeleteVaccine}
+                          id={vac.id}
+                          className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
+                        >
+                          <MdDelete />
+                          Sil
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            )}
+            {filterDate && isDate && (
+              <tbody className="border h-14 font-light text-black  text-xl ">
+                {filterDate?.map((vac, index) => {
+                  return (
+                    <tr key={index} className="text-xl bg-white h-10">
+                      <td className="border"> {vac.name} </td>
+                      <td className="border"> {vac.code} </td>
+                      <td className="border"> {vac.protectionStartDate} </td>
+                      <td className="border"> {vac.protectionFinishDate} </td>
+                      <td className="border"> {vac?.animal?.name} </td>
+
+                      <td
+                        className=" border flex justify-center items-center gap-2 py-3
+              "
+                      >
+                        <div
+                          onClick={handleDeleteVaccine}
+                          id={vac.id}
+                          className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
+                        >
+                          <MdDelete />
+                          Sil
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            )}
           </table>
         </div>
       </div>
