@@ -24,6 +24,14 @@ function Animal() {
     ...initState,
   });
 
+  const [filteredAnimal, setFilteredAnimal] = useState([]);
+  const [isAnimalNameSearch, setIsAnimalNameSearch] = useState(false);
+  const [animalSearch, setAnimalSearch] = useState("");
+
+  const [filteredCustomer, setFilteredCustomer] = useState([]);
+  const [isCustomerNameSearch, setIsCustomerNameSearch] = useState(false);
+  const [customerSearch, setCustomerSearch] = useState("");
+
   useEffect(() => {
     axios
       .get(import.meta.env.VITE_VET_API_BASEURL + "/api/v1/animals")
@@ -118,6 +126,51 @@ function Animal() {
     }));
   };
 
+  // hayvan adına göre arama
+
+  const handleAnimalNameSearch = () => {
+    axios
+      .get(
+        import.meta.env.VITE_VET_API_BASEURL +
+          `/api/v1/animals/searchByName?name=${animalSearch}&pageNumber=0&pageSize=10`
+      )
+      .then((res) => setFilteredAnimal(res.data.content))
+      .then(() => setIsAnimalNameSearch(true))
+      .then(() => setAnimalSearch(""));
+    console.log(filteredAnimal);
+  };
+
+  const handleAnimalNameChange = (e) => {
+    const { value } = e.target;
+    setAnimalSearch((prev) => value);
+    setIsAnimalNameSearch(false);
+    console.log(animalSearch);
+  };
+  // Müşteri adına göre arama
+
+  const handleCustomerNameSearch = () => {
+    axios
+      .get(
+        import.meta.env.VITE_VET_API_BASEURL +
+          `/api/v1/animals/searchByCustomer?customerName=${customerSearch}&pageNumber=0&pageSize=10`
+      )
+      .then((res) => setFilteredCustomer(res.data.content))
+      .then(() => setIsCustomerNameSearch(true))
+      .then(() => setCustomerSearch(""));
+    console.log(filteredCustomer);
+  };
+
+  const handleCustomerNameChange = (e) => {
+    const { value } = e.target;
+    setCustomerSearch((prev) => value);
+    setIsCustomerNameSearch(false);
+    console.log(customerSearch);
+  };
+
+  // resetleme butonu
+  const handleResetBtn = () => {
+    window.location.reload();
+  };
   return (
     <div>
       <h1 className="text-center text-white mt-2 text-2xl">Hayvan Yönetimi</h1>
@@ -128,8 +181,15 @@ function Animal() {
             type="text"
             placeholder="Hayvan Adı"
             className="py-1 rounded-md pl-2"
+            value={animalSearch}
+            onChange={handleAnimalNameChange}
           />
-          <button className="bg-yellow-400 rounded-md px-2 ">Ara</button>
+          <button
+            onClick={handleAnimalNameSearch}
+            className="bg-yellow-400 rounded-md px-2 "
+          >
+            Ara
+          </button>
         </div>
       </div>
       <div>
@@ -137,10 +197,25 @@ function Animal() {
           <input
             type="text"
             placeholder="Müşteri Adı"
+            value={customerSearch}
             className="py-1 rounded-md pl-2"
+            onChange={handleCustomerNameChange}
           />
-          <button className="bg-yellow-400 rounded-md px-2 ">Ara</button>
+          <button
+            onClick={handleCustomerNameSearch}
+            className="bg-yellow-400 rounded-md px-2 "
+          >
+            Ara
+          </button>
         </div>
+      </div>
+      <div className="flex text-right justify-end mr-24 mt-2 gap-1">
+        <button
+          onClick={handleResetBtn}
+          className="bg-yellow-400 rounded-md px-2 "
+        >
+          Tüm Hayvanlar
+        </button>
       </div>
 
       <div className="  backdrop-blur-[6px] bg-white/15 flex justify-evenly rounded-md w-10/12 mx-auto mb-8 mt-4">
@@ -357,42 +432,121 @@ function Animal() {
                 <th className="border w-3/12">Sil / Düzenle</th>
               </tr>
             </thead>
-            <tbody className="border h-14 font-light text-black  text-xl ">
-              {animal?.map((ani, index) => {
-                return (
-                  <tr key={index} className="text-xl bg-white h-10">
-                    <td className="border"> {ani.name} </td>
-                    <td className="border"> {ani?.customer?.name} </td>
-                    <td className="border"> {ani.species} </td>
-                    <td className="border"> {ani.breed} </td>
-                    <td className="border"> {ani.gender} </td>
-                    <td className="border"> {ani.colour} </td>
-                    <td className="border"> {ani.dateOfBirth} </td>
-                    <td
-                      className=" border flex justify-center items-center gap-2 py-3
+
+            {animal && !isAnimalNameSearch && !isCustomerNameSearch && (
+              <tbody className="border h-14 font-light text-black  text-xl ">
+                {animal?.map((ani, index) => {
+                  return (
+                    <tr key={index} className="text-xl bg-white h-10">
+                      <td className="border"> {ani.name} </td>
+                      <td className="border"> {ani?.customer?.name} </td>
+                      <td className="border"> {ani.species} </td>
+                      <td className="border"> {ani.breed} </td>
+                      <td className="border"> {ani.gender} </td>
+                      <td className="border"> {ani.colour} </td>
+                      <td className="border"> {ani.dateOfBirth} </td>
+                      <td
+                        className=" border flex justify-center items-center gap-2 py-3
                    "
-                    >
-                      <div
-                        onClick={handleDeleteAnimal}
-                        id={ani.id}
-                        className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
                       >
-                        <MdDelete />
-                        Sil
-                      </div>
-                      <div
-                        onClick={handleUpdateAnimalBtn}
-                        id={index}
-                        className="flex justify-center items-center text-center cursor-pointer text-blue-400 rounded-md px-2 text-xl bg-blue-100"
+                        <div
+                          onClick={handleDeleteAnimal}
+                          id={ani.id}
+                          className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
+                        >
+                          <MdDelete />
+                          Sil
+                        </div>
+                        <div
+                          onClick={handleUpdateAnimalBtn}
+                          id={index}
+                          className="flex justify-center items-center text-center cursor-pointer text-blue-400 rounded-md px-2 text-xl bg-blue-100"
+                        >
+                          <MdModeEdit />
+                          Düzenle
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            )}
+            {filteredAnimal && isAnimalNameSearch && (
+              <tbody className="border h-14 font-light text-black  text-xl ">
+                {filteredAnimal?.map((ani, index) => {
+                  return (
+                    <tr key={index} className="text-xl bg-white h-10">
+                      <td className="border"> {ani.name} </td>
+                      <td className="border"> {ani?.customer?.name} </td>
+                      <td className="border"> {ani.species} </td>
+                      <td className="border"> {ani.breed} </td>
+                      <td className="border"> {ani.gender} </td>
+                      <td className="border"> {ani.colour} </td>
+                      <td className="border"> {ani.dateOfBirth} </td>
+                      <td
+                        className=" border flex justify-center items-center gap-2 py-3
+                  "
                       >
-                        <MdModeEdit />
-                        Düzenle
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
+                        <div
+                          onClick={handleDeleteAnimal}
+                          id={ani.id}
+                          className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
+                        >
+                          <MdDelete />
+                          Sil
+                        </div>
+                        <div
+                          onClick={handleUpdateAnimalBtn}
+                          id={index}
+                          className="flex justify-center items-center text-center cursor-pointer text-blue-400 rounded-md px-2 text-xl bg-blue-100"
+                        >
+                          <MdModeEdit />
+                          Düzenle
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            )}
+            {filteredCustomer && isCustomerNameSearch && (
+              <tbody className="border h-14 font-light text-black  text-xl ">
+                {filteredCustomer?.map((ani, index) => {
+                  return (
+                    <tr key={index} className="text-xl bg-white h-10">
+                      <td className="border"> {ani.name} </td>
+                      <td className="border"> {ani?.customer?.name} </td>
+                      <td className="border"> {ani.species} </td>
+                      <td className="border"> {ani.breed} </td>
+                      <td className="border"> {ani.gender} </td>
+                      <td className="border"> {ani.colour} </td>
+                      <td className="border"> {ani.dateOfBirth} </td>
+                      <td
+                        className=" border flex justify-center items-center gap-2 py-3
+                  "
+                      >
+                        <div
+                          onClick={handleDeleteAnimal}
+                          id={ani.id}
+                          className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
+                        >
+                          <MdDelete />
+                          Sil
+                        </div>
+                        <div
+                          onClick={handleUpdateAnimalBtn}
+                          id={index}
+                          className="flex justify-center items-center text-center cursor-pointer text-blue-400 rounded-md px-2 text-xl bg-blue-100"
+                        >
+                          <MdModeEdit />
+                          Düzenle
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            )}
           </table>
         </div>
       </div>
