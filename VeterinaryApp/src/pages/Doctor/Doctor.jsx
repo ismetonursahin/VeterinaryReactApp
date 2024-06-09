@@ -386,7 +386,7 @@ function Doctor() {
                 <th className="border w-2/12">Tarih</th>
                 <th className="border w-2/12">E-posta</th>
                 <th className="border w-2/12">Telefon</th>
-                <th className="border w-2/12">Sil / Düzenle</th>
+                <th className="border w-2/12">Sil</th>
               </tr>
             </thead>
             <tbody className="border h-14 font-light text-black  text-xl ">
@@ -408,14 +408,6 @@ function Doctor() {
                       >
                         <MdDelete />
                         Sil
-                      </div>
-                      <div
-                        onClick={handleUpdateAvailableDateBtn}
-                        id={index}
-                        className="flex justify-center items-center text-center cursor-pointer text-blue-400 rounded-md px-2 text-xl bg-blue-100"
-                      >
-                        <MdModeEdit />
-                        Düzenle
                       </div>
                     </td>
                   </tr>
@@ -443,6 +435,9 @@ function Doctor() {
                 value={newAvailableDate.doctorId || ""}
                 onChange={handleDoctorSelectChange}
               >
+                <option value="" disabled>
+                  Doktor Seç
+                </option>
                 {doctor?.map((doc) => (
                   <option value={doc.id} key={doc.id}>
                     {doc.name}
@@ -454,38 +449,6 @@ function Doctor() {
                 onClick={handleNewAvailableDate}
               >
                 Tarih Ekle
-              </button>
-            </div>
-          </div>
-          <div className="flex gap-3 backdrop-blur-[6px] bg-white/10 rounded-md items-center px-4 py-5">
-            <h1 className="text-white text-xl">Tarih Güncelle</h1>
-            <div className="">
-              <input
-                className="rounded-sm px-1 py-1"
-                type="date"
-                name="workDate"
-                value={updateAvailableDate.workDate}
-                placeholder="Tarih"
-                onChange={handleUpdateAvailableDateInputChange}
-              />{" "}
-              <select
-                name="doctorId"
-                id="doctorSelect"
-                className="py-1 rounded-sm"
-                value={updateAvailableDate?.doctorId || ""}
-                onChange={handleUpdateDoctorSelectChange}
-              >
-                {doctor?.map((doc, index) => (
-                  <option value={doc.id} key={doc.id} id={index}>
-                    {doc.name}
-                  </option>
-                ))}
-              </select>
-              <button
-                onClick={handleUpdateAvailableDate}
-                className=" bg-blue-400 rounded-md px-2 py-[6px] ml-1"
-              >
-                Tarih Güncelle
               </button>
             </div>
           </div>

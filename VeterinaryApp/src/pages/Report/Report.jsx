@@ -64,10 +64,53 @@ function Report() {
   };
 
   // delete işlemleri
-  const handleDeleteReport = () => {};
+  const handleDeleteReport = (e) => {
+    const id = e.target.id;
+    console.log(id);
+    axios
+      .delete(import.meta.env.VITE_VET_API_BASEURL + `/api/v1/reports/${id}`)
+      .then(() => setUpdate(false));
+  };
 
   // update işelmleri
-  const handleUpdateBtn = () => {};
+  const handleUpdateBtn = (e) => {
+    const index = e.target.id;
+    setUpdateReport({ ...report[index] });
+  };
+  const handleUpdateReportInputChange = (e) => {
+    const { name, value } = e.target;
+    setUpdateReport((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const handleUpdateAppointmentSelectChange = () => {
+    const value = e.target.value;
+    const newappo = appointment.find((d) => d.id === +value);
+    setUpdateReport((prev) => ({
+      ...prev,
+      appointmentId: newappo.id,
+    }));
+    console.log(newReport);
+  };
+
+  const handleUpdateReport = () => {
+    const { id } = updateReport;
+    axios
+      .put(
+        import.meta.env.VITE_VET_API_BASEURL + `/api/v1/reports/${id}`,
+        updateReport
+      )
+      .then(() => setUpdate(false))
+      .then(
+        setUpdateReport({
+          title: "",
+          diagnosis: "",
+          price: 0,
+          appointment: {},
+        })
+      );
+  };
 
   return (
     <div>
@@ -152,66 +195,72 @@ function Report() {
               </button>
             </div>
           </div>
-          {/* <div className="px-12  backdrop-blu-[px] bg-white/10 rounded-md pb-3 ">
+          <div className="px-12  backdrop-blu-[px] bg-white/10 rounded-md pb-3 ">
             <h2 className="mt-2 text-center text-white text-lg mb-1">
-              Randevu Güncelle
+              Rapor Güncelle
             </h2>
             <div className="flex flex-col gap-2 w-44 items-center">
               <label htmlFor="">
-                <h2 className="text-white">Tarih</h2>
+                <h2 className="text-white">Rapor Başlığı</h2>
                 <input
-                  className="rounded-sm px-1 py-1 w-12/12"
-                  type="datetime-local"
-                  name="appointmentDate"
-                  placeholder="Tarih"
-                  value={updateAppointment.appointmentDate}
-                  onChange={handleUpdateDateChange}
+                  className="rounded-sm px-1 py-1"
+                  type="text"
+                  name="title"
+                  value={updateReport.title}
+                  placeholder="Rapor Başlığı"
+                  onChange={handleUpdateReportInputChange}
+                />
+              </label>
+              <label htmlFor="">
+                <h2 className="text-white">Teşhis</h2>
+                <input
+                  className="rounded-sm px-1 py-1"
+                  type="text"
+                  name="diagnosis"
+                  value={updateReport.diagnosis}
+                  placeholder="Teşhis"
+                  onChange={handleUpdateReportInputChange}
+                />
+              </label>
+              <label htmlFor="">
+                <h2 className="text-white">Ücret</h2>
+                <input
+                  className="rounded-sm px-1 py-1"
+                  type="text"
+                  name="price"
+                  value={updateReport.price}
+                  placeholder="Ücreti"
+                  onChange={handleUpdateReportInputChange}
                 />
               </label>
               <div className=" w-12/12">
-                <h2 className="text-white">Doktor </h2>
+                <h2 className="text-white">Randevu</h2>
                 <select
-                  name="doctor"
-                  className="rounded-sm px-8 py-1
-                "
-                  value={updateAppointment.doctor.id || ""}
-                  onChange={handleUpdateDoctorSelectChange}
-                >
-                  <option value="">Doktor Seç</option>
-                  {doctor.map((doc, index) => (
-                    <option key={doc.id} value={doc.id}>
-                      {doc.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className=" w-12/12">
-                <h2 className="text-white">Hayvan </h2>
-                <select
-                  value={updateAppointment.animal.id || ""}
-                  name="doctor"
+                  name="appointmentId"
                   className="rounded-sm px-8 py-1"
-                  onChange={handleUpdateAnimalSelectChange}
+                  onChange={handleUpdateAppointmentSelectChange}
+                  value={updateReport?.appointmentId || ""}
                 >
-                  <option value="">Hayvan Seç</option>
-                  {animal.map((ani, index) => (
-                    <option value={ani.id} key={ani.id}>
-                      {ani.name}
+                  <option value="">Randevu Seç</option>
+                  {appointment.map((app, index) => (
+                    <option value={app.id} key={app.id} id={index}>
+                      ID : {app.id}
                     </option>
                   ))}
                 </select>
               </div>
+
               <button
-                onClick={handleUpdateAppointment}
-                className="flex justify-center items-center w-24 p-1 bg-blue-400 gap-2 rounded-lg"
+                className="flex justify-center items-center w-24 p-1 bg-blue-200 gap-2 rounded-lg"
+                onClick={handleUpdateReport}
               >
                 <div>
-                  <MdModeEdit />
+                  <IoMdAdd />
                 </div>
                 <div>Güncelle</div>
               </button>
             </div>
-          </div> */}
+          </div>
         </div>
 
         <div>

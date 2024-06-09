@@ -22,6 +22,10 @@ function Customer() {
     phone: "",
   });
 
+  const [filteredCustomer, setFilteredCustomer] = useState([]);
+  const [search, setSearch] = useState("");
+  const [isSearch, setIsSearch] = useState(false);
+
   useEffect(() => {
     axios
       .get(import.meta.env.VITE_VET_API_BASEURL + "/api/v1/customers")
@@ -94,9 +98,27 @@ function Customer() {
       );
   };
 
-  useEffect(() => {
-    console.log(customer);
-  }, [customer]);
+  // arama işlemleri
+
+  const handleSearch = () => {
+    axios
+      .get(
+        import.meta.env.VITE_VET_API_BASEURL +
+          `/api/v1/customers/searchByName?name=${search}&pageNumber=0&pageSize=10`
+      )
+      .then((res) => setFilteredCustomer(res.data.content))
+      .then(() => setIsSearch(true))
+      .then(() => setSearch(""));
+
+    console.log(filteredCustomer);
+  };
+
+  const handleCustomerNameChange = (e) => {
+    const { value } = e.target;
+    setSearch((prev) => value);
+    setIsSearch(false);
+    console.log(search);
+  };
 
   return (
     <div>
@@ -109,10 +131,17 @@ function Customer() {
           <input
             type="text"
             placeholder="Müşteri Adı"
+            value={search}
             className="py-1 rounded-md pl-2"
+            onChange={handleCustomerNameChange}
           />
         </label>
-        <button className="bg-yellow-400 rounded-md px-2 ">Ara</button>
+        <button
+          onClick={handleSearch}
+          className="bg-yellow-400 rounded-md px-2 "
+        >
+          Ara
+        </button>
       </div>
 
       <div
@@ -233,6 +262,7 @@ function Customer() {
             </div>
           </div>
         </div>
+
         <table className="border h-14 font-extrabold text-slate-400  text-xl rounded-lg  py-5 bg-slate-50  w-9/12 mx-auto mt-8 table-fixed overflow-hidden ">
           <thead className=" border h-14 font-extrabold text-slate-400  text-xl ">
             <tr className="">
@@ -244,41 +274,128 @@ function Customer() {
               <th className="border w-2/12">Sil / Düzenle</th>
             </tr>
           </thead>
-          <tbody className="border h-14 font-light text-black  text-xl ">
-            {customer?.map((custo, index) => {
-              return (
-                <tr key={index} className="text-xl bg-white h-10">
-                  <td className="border"> {custo.name} </td>
-                  <td className="border"> {custo.email} </td>
-                  <td className="border"> {custo.phone} </td>
-                  <td className="border"> {custo.address} </td>
-                  <td className="border"> {custo.city} </td>
-                  <td
-                    className=" border flex justify-center items-center gap-2 py-3
+          {customer && !isSearch && (
+            <tbody className="border h-14 font-light text-black  text-xl ">
+              {customer?.map((custo, index) => {
+                return (
+                  <tr key={index} className="text-xl bg-white h-10">
+                    <td className="border"> {custo.name} </td>
+                    <td className="border"> {custo.email} </td>
+                    <td className="border"> {custo.phone} </td>
+                    <td className="border"> {custo.address} </td>
+                    <td className="border"> {custo.city} </td>
+                    <td
+                      className=" border flex justify-center items-center gap-2 py-3
                    "
-                  >
-                    <div
-                      onClick={handleDeleteCustomer}
-                      id={custo.id}
-                      className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
                     >
-                      <MdDelete />
-                      Sil
-                    </div>
-                    <div
-                      onClick={handleUpdateCustomerBtn}
-                      id={index}
-                      className="flex justify-center items-center text-center cursor-pointer text-blue-400 rounded-md px-2 text-xl bg-blue-100"
+                      <div
+                        onClick={handleDeleteCustomer}
+                        id={custo.id}
+                        className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
+                      >
+                        <MdDelete />
+                        Sil
+                      </div>
+                      <div
+                        onClick={handleUpdateCustomerBtn}
+                        id={index}
+                        className="flex justify-center items-center text-center cursor-pointer text-blue-400 rounded-md px-2 text-xl bg-blue-100"
+                      >
+                        <MdModeEdit />
+                        Düzenle
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          )}
+          {filteredCustomer && isSearch && (
+            <tbody className="border h-14 font-light text-black  text-xl ">
+              {filteredCustomer?.map((custo, index) => {
+                return (
+                  <tr key={index} className="text-xl bg-white h-10">
+                    <td className="border"> {custo.name} </td>
+                    <td className="border"> {custo.email} </td>
+                    <td className="border"> {custo.phone} </td>
+                    <td className="border"> {custo.address} </td>
+                    <td className="border"> {custo.city} </td>
+                    <td
+                      className=" border flex justify-center items-center gap-2 py-3
+                   "
                     >
-                      <MdModeEdit />
-                      Düzenle
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
+                      <div
+                        onClick={handleDeleteCustomer}
+                        id={custo.id}
+                        className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
+                      >
+                        <MdDelete />
+                        Sil
+                      </div>
+                      <div
+                        onClick={handleUpdateCustomerBtn}
+                        id={index}
+                        className="flex justify-center items-center text-center cursor-pointer text-blue-400 rounded-md px-2 text-xl bg-blue-100"
+                      >
+                        <MdModeEdit />
+                        Düzenle
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          )}
         </table>
+
+        {/* <div className="mt-2">
+          <table className="border h-14 font-extrabold text-slate-400  text-xl rounded-lg  py-5 bg-slate-50  w-9/12 mx-auto mt-8 table-fixed overflow-hidden ">
+            <thead className=" border h-14 font-extrabold text-slate-400  text-xl ">
+              <tr className="">
+                <th className=" border w-2/12">İsim</th>
+                <th className="border w-2/12">E-posta</th>
+                <th className="border w-2/12">Telefon</th>
+                <th className="border w-2/12">Adres</th>
+                <th className="border w-2/12">Şehir</th>
+                <th className="border w-2/12">Sil / Düzenle</th>
+              </tr>
+            </thead>
+            <tbody className="border h-14 font-light text-black  text-xl ">
+              {filteredCustomer?.map((filter, index) => {
+                return (
+                  <tr key={index} className="text-xl bg-white h-10">
+                    <td className="border"> {filter.name} </td>
+                    <td className="border"> {filter.email} </td>
+                    <td className="border"> {filter.phone} </td>
+                    <td className="border"> {filter.address} </td>
+                    <td className="border"> {filter.city} </td>
+                    <td
+                      className=" border flex justify-center items-center gap-2 py-3
+                   "
+                    >
+                      <div
+                        onClick={handleDeleteCustomer}
+                        id={filter.id}
+                        className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
+                      >
+                        <MdDelete />
+                        Sil
+                      </div>
+                      <div
+                        onClick={handleUpdateCustomerBtn}
+                        id={index}
+                        className="flex justify-center items-center text-center cursor-pointer text-blue-400 rounded-md px-2 text-xl bg-blue-100"
+                      >
+                        <MdModeEdit />
+                        Düzenle
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div> */}
       </div>
     </div>
   );
