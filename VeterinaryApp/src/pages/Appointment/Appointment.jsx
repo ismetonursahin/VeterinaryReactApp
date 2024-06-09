@@ -140,6 +140,78 @@ function Appointment() {
       .then(() => setUpdate(false));
   };
 
+  // doktora id-date göre randevu arama
+  const [filteredDoctorId, setFilteredDoctorId] = useState([]);
+  const [doctorId, setDoctorId] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [finishDate, setFinishDate] = useState("");
+  const [isDoctorSearch, setIsDoctorSearch] = useState(false);
+
+  const handleDoctorIDChange = (e) => {
+    const { value } = e.target;
+    setDoctorId(value);
+  };
+
+  const handleStartDateChange = (e) => {
+    const { value } = e.target;
+    setStartDate(value);
+  };
+  const handleFinishDateChange = (e) => {
+    const { value } = e.target;
+    setFinishDate(value);
+  };
+
+  const handleDoctorSearchBtn = () => {
+    axios
+      .get(
+        import.meta.env.VITE_VET_API_BASEURL +
+          `/api/v1/appointments/searchByDoctorAndDateRange?id=${doctorId}&startDate=${startDate}&endDate=${finishDate}&pageNumber=0&pageSize=10`
+      )
+      .then((res) => setFilteredDoctorId(res.data.content))
+      .then(() => setIsDoctorSearch(true))
+      .then(() => setDoctorId(""))
+      .then(() => setStartDate(""))
+      .then(() => setFinishDate(""));
+  };
+
+  // hayvan id-date göre randevu arama
+  const [filteredAnimalId, setFilteredAnimalId] = useState([]);
+  const [animalId, setAnimalId] = useState("");
+  const [animalStartDate, setAnimalStartDate] = useState("");
+  const [animalFinishDate, setAnimalFinishDate] = useState("");
+  const [isAnimalSearch, setIsAnimalSearch] = useState(false);
+  useState("");
+
+  const handleAnimalIDChange = (e) => {
+    const { value } = e.target;
+    setAnimalId(value);
+  };
+  const handleStartDateAnimalChange = (e) => {
+    const { value } = e.target;
+    setAnimalStartDate(value);
+  };
+  const handleFinishDateAnimalChange = (e) => {
+    const { value } = e.target;
+    setAnimalFinishDate(value);
+  };
+  const handleAnimalSearchBtn = () => {
+    axios
+      .get(
+        import.meta.env.VITE_VET_API_BASEURL +
+          `/api/v1/appointments/searchByAnimalAndDateRange?id=${animalId}&startDate=${animalStartDate}&endDate=${animalFinishDate}&pageNumber=0&pageSize=10`
+      )
+      .then((res) => setFilteredAnimalId(res.data.content))
+      .then(() => setIsAnimalSearch(true))
+      .then(() => setAnimalId(""))
+      .then(() => setAnimalStartDate(""))
+      .then(() => setAnimalFinishDate(""));
+
+    console.log(filteredAnimalId);
+  };
+  // resetleme btn
+  const handleResetBtn = () => {
+    window.location.reload();
+  };
   return (
     <div>
       <h1 className="text-center text-white mt-2 text-2xl">Randevu Yönetimi</h1>
@@ -147,24 +219,70 @@ function Appointment() {
       <div>
         <div className="flex text-right justify-end mr-24 mt-2 gap-1">
           <h2 className="text-white mr-1">Doktor-Tarih</h2>
-          <select name="" id="">
-            <option value=""></option>
+          <select name="" value={doctorId} onChange={handleDoctorIDChange}>
+            <option value="" disabled>
+              Doktor ID
+            </option>
+            {doctor.map((doc, index) => (
+              <option key={doc.id} value={doc.id}>
+                {doc.id}
+              </option>
+            ))}
           </select>
-          <input type="datetime-local" />
-          <input type="datetime-local" />
-          <button className="bg-yellow-400 rounded-md px-2 ">Ara</button>
+          <input
+            type="date"
+            value={startDate}
+            onChange={handleStartDateChange}
+          />
+          <input
+            type="date"
+            value={finishDate}
+            onChange={handleFinishDateChange}
+          />
+          <button
+            onClick={handleDoctorSearchBtn}
+            className="bg-yellow-400 rounded-md px-2 "
+          >
+            Ara
+          </button>
         </div>
-      </div>
-
-      <div>
         <div className="flex text-right justify-end mr-24 mt-2 gap-1">
           <h2 className="text-white mr-1">Hayvan-Tarih</h2>
-          <select name="" id="">
-            <option value=""></option>
+
+          <select name="" value={animalId} onChange={handleAnimalIDChange}>
+            <option value="" disabled>
+              Hayvan ID
+            </option>
+            {animal.map((ani, index) => (
+              <option key={ani.id} value={ani.id}>
+                {ani.id}
+              </option>
+            ))}
           </select>
-          <input type="datetime-local" />
-          <input type="datetime-local" />
-          <button className="bg-yellow-400 rounded-md px-2 ">Ara</button>
+          <input
+            type="date"
+            value={animalStartDate}
+            onChange={handleStartDateAnimalChange}
+          />
+          <input
+            type="date"
+            value={animalFinishDate}
+            onChange={handleFinishDateAnimalChange}
+          />
+          <button
+            onClick={handleAnimalSearchBtn}
+            className="bg-yellow-400 rounded-md px-2 "
+          >
+            Ara
+          </button>
+        </div>
+        <div className="flex text-right justify-end mr-24 mt-2 gap-1">
+          <button
+            onClick={handleResetBtn}
+            className="bg-lime-300 rounded-md px-2 "
+          >
+            Tüm Randevuları Göster
+          </button>
         </div>
       </div>
 
@@ -309,42 +427,138 @@ function Appointment() {
                 <th className="border w-3/12">Sil / Düzenle</th>
               </tr>
             </thead>
-            <tbody className="border h-14 font-light text-black  text-xl ">
-              {appointment?.map((appo, index) => {
-                return (
-                  <tr key={index} className="text-xl bg-white h-10">
-                    <td className="border"> {appo.id} </td>
-                    <td className="border"> {appo?.doctor?.name} </td>
-                    <td className="border"> {appo.appointmentDate} </td>
-                    <td className="border"> {appo?.animal?.name} </td>
-                    <td className="border"> {appo.animal?.customer?.name} </td>
-                    <td className="border"> {appo.animal?.customer?.phone} </td>
-                    <td className="border"> {appo.doctor.phone} </td>
-                    <td
-                      className=" border flex justify-center items-center gap-2 py-3
-                   "
-                    >
-                      <div
-                        onClick={handleDeleteAppointment}
-                        id={appo.id}
-                        className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
+            {appointment && !isDoctorSearch && !isAnimalSearch && (
+              <tbody className="border h-14 font-light text-black  text-xl ">
+                {appointment?.map((appo, index) => {
+                  return (
+                    <tr key={index} className="text-xl bg-white h-10">
+                      <td className="border"> {appo.id} </td>
+                      <td className="border"> {appo?.doctor?.name} </td>
+                      <td className="border"> {appo.appointmentDate} </td>
+                      <td className="border"> {appo?.animal?.name} </td>
+                      <td className="border">
+                        {" "}
+                        {appo.animal?.customer?.name}{" "}
+                      </td>
+                      <td className="border">
+                        {" "}
+                        {appo.animal?.customer?.phone}{" "}
+                      </td>
+                      <td className="border"> {appo.doctor.phone} </td>
+                      <td
+                        className=" border flex justify-center items-center gap-2 py-3
+                  "
                       >
-                        <MdDelete />
-                        Sil
-                      </div>
-                      <div
-                        onClick={handleUpdateBtn}
-                        id={index}
-                        className="flex justify-center items-center text-center cursor-pointer text-blue-400 rounded-md px-2 text-xl bg-blue-100"
+                        <div
+                          onClick={handleDeleteAppointment}
+                          id={appo.id}
+                          className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
+                        >
+                          <MdDelete />
+                          Sil
+                        </div>
+                        <div
+                          onClick={handleUpdateBtn}
+                          id={index}
+                          className="flex justify-center items-center text-center cursor-pointer text-blue-400 rounded-md px-2 text-xl bg-blue-100"
+                        >
+                          <MdModeEdit />
+                          Düzenle
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            )}
+            {filteredDoctorId && isDoctorSearch && (
+              <tbody className="border h-14 font-light text-black  text-xl ">
+                {filteredDoctorId?.map((appo, index) => {
+                  return (
+                    <tr key={index} className="text-xl bg-white h-10">
+                      <td className="border"> {appo.id} </td>
+                      <td className="border"> {appo?.doctor?.name} </td>
+                      <td className="border"> {appo.appointmentDate} </td>
+                      <td className="border"> {appo?.animal?.name} </td>
+                      <td className="border">
+                        {" "}
+                        {appo.animal?.customer?.name}{" "}
+                      </td>
+                      <td className="border">
+                        {" "}
+                        {appo.animal?.customer?.phone}{" "}
+                      </td>
+                      <td className="border"> {appo.doctor.phone} </td>
+                      <td
+                        className=" border flex justify-center items-center gap-2 py-3
+                  "
                       >
-                        <MdModeEdit />
-                        Düzenle
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
+                        <div
+                          onClick={handleDeleteAppointment}
+                          id={appo.id}
+                          className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
+                        >
+                          <MdDelete />
+                          Sil
+                        </div>
+                        <div
+                          onClick={handleUpdateBtn}
+                          id={index}
+                          className="flex justify-center items-center text-center cursor-pointer text-blue-400 rounded-md px-2 text-xl bg-blue-100"
+                        >
+                          <MdModeEdit />
+                          Düzenle
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            )}
+            {filteredAnimalId && isAnimalSearch && (
+              <tbody className="border h-14 font-light text-black  text-xl ">
+                {filteredAnimalId?.map((appo, index) => {
+                  return (
+                    <tr key={index} className="text-xl bg-white h-10">
+                      <td className="border"> {appo.id} </td>
+                      <td className="border"> {appo?.doctor?.name} </td>
+                      <td className="border"> {appo.appointmentDate} </td>
+                      <td className="border"> {appo?.animal?.name} </td>
+                      <td className="border">
+                        {" "}
+                        {appo.animal?.customer?.name}{" "}
+                      </td>
+                      <td className="border">
+                        {" "}
+                        {appo.animal?.customer?.phone}{" "}
+                      </td>
+                      <td className="border"> {appo.doctor.phone} </td>
+                      <td
+                        className=" border flex justify-center items-center gap-2 py-3
+                  "
+                      >
+                        <div
+                          onClick={handleDeleteAppointment}
+                          id={appo.id}
+                          className="flex justify-center items-center text-center text-red-500 rounded-md text-xl px-2 bg-red-200 cursor-pointer"
+                        >
+                          <MdDelete />
+                          Sil
+                        </div>
+                        <div
+                          onClick={handleUpdateBtn}
+                          id={index}
+                          className="flex justify-center items-center text-center cursor-pointer text-blue-400 rounded-md px-2 text-xl bg-blue-100"
+                        >
+                          <MdModeEdit />
+                          Düzenle
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            )}
           </table>
         </div>
       </div>
